@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c36a5fcb-825d-4dc9-901e-f33d4a5a135d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LuaAPI/CocoApi.lua" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LuaAPI/MaskApi.lua" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LuaAPI/cocoDemo.lua" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LuaAPI/env.lua" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LuaAPI/init.lua" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LuaAPI/rocks/coco-scm-1.rockspec" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MatlabAPI/CocoApi.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MatlabAPI/CocoEval.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MatlabAPI/CocoUtils.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MatlabAPI/MaskApi.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MatlabAPI/cocoDemo.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MatlabAPI/evalDemo.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MatlabAPI/gason.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MatlabAPI/private/gasonMex.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MatlabAPI/private/gasonMex.mexa64" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MatlabAPI/private/gasonMex.mexmaci64" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MatlabAPI/private/getPrmDflt.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MatlabAPI/private/maskApiMex.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonAPI/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonAPI/pycocoDemo.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonAPI/pycocoEvalDemo.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonAPI/pycocotools/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonAPI/pycocotools/_mask.pyx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonAPI/pycocotools/coco.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonAPI/pycocotools/cocoeval.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonAPI/pycocotools/mask.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PythonAPI/setup.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/captions_val2014_fakecap_results.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/instances_val2014_fakebbox100_results.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/instances_val2014_fakesegm100_results.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/person_keypoints_val2014_fakekeypoints100_results.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/val2014_fake_eval_res.txt" beforeDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>common</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/setup.py" />
+        <option value="$PROJECT_DIR$/pycocotools/_mask.pyx" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/.idea/cocoapi.iml" />
+        <option value="$PROJECT_DIR$/.idea/misc.xml" />
+        <option value="$PROJECT_DIR$/.idea/modules.xml" />
+        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="340" />
+    <option name="y" value="221" />
+    <option name="width" value="608" />
+    <option name="height" value="993" />
+  </component>
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c36a5fcb-825d-4dc9-901e-f33d4a5a135d" name="Default Changelist" comment="" />
+      <created>1612062488677</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1612062488677</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <layout>
+      <window_info id="Favorites" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24966975" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Python Console" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="10" column="43" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
