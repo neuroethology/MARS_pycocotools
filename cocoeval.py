@@ -56,8 +56,9 @@ class COCOeval:
     # Microsoft COCO Toolbox.      version 2.0
     # Data, paper, and tutorials available at:  http://mscoco.org/
     # Code written by Piotr Dollar and Tsung-Yi Lin, 2015.
+    # Code modified for application to MARS by Ann Kennedy, 2021.
     # Licensed under the Simplified BSD License [see coco/license.txt]
-    def __init__(self, cocoGt=None, cocoDt=None, iouType='segm'):
+    def __init__(self, cocoGt=None, cocoDt=None, iouType='segm', sigmaType='MARS'):
         '''
         Initialize CocoEval using coco APIs for gt and dt
         :param cocoGt: coco object with ground truth annotations
@@ -66,6 +67,9 @@ class COCOeval:
         '''
         if not iouType:
             print('iouType not specified. use default iouType segm')
+        if not sigmaType:
+            print('sigmaType not specified. use default sigmaType MARS')
+
         self.cocoGt   = cocoGt              # ground truth COCO API
         self.cocoDt   = cocoDt              # detections COCO API
         self.evalImgs = defaultdict(list)   # per-image per-category evaluation results [KxAxI] elements
@@ -204,12 +208,12 @@ class COCOeval:
         ious = np.zeros((len(dts), len(gts)))
         sigmas = p.kpt_oks_sigmas
         vars = (sigmas * 2)**2
-        k = len(sigmas)
         # compute oks between each detection and ground truth object
         for j, gt in enumerate(gts):
             # create bounds for ignore regions(double the gt bbox)
             g = np.array(gt['keypoints'])
             xg = g[0::3]; yg = g[1::3]; vg = g[2::3]
+            k = len(xg)
             k1 = np.count_nonzero(vg > 0)
             bb = gt['bbox']
             x0 = bb[0] - bb[2]; x1 = bb[0] + bb[2] * 2
@@ -224,8 +228,8 @@ class COCOeval:
                 else:
                     # measure minimum distance to keypoints in (x0,y0) & (x1,y1)
                     z = np.zeros((k))
-                    dx = np.max((z, x0-xd),axis=0)+np.max((z, xd-x1),axis=0)
-                    dy = np.max((z, y0-yd),axis=0)+np.max((z, yd-y1),axis=0)
+                    dx = np.max((z, x0-xd), axis=0) + np.max((z, xd-x1), axis=0)
+                    dy = np.max((z, y0-yd), axis=0) + np.max((z, yd-y1), axis=0)
                 e = (dx**2 + dy**2) / vars / (gt['area']+np.spacing(1)) / 2
                 if k1 > 0:
                     e=e[vg > 0]
@@ -510,7 +514,7 @@ class Params:
         self.areaRngLbl = ['all', 'small', 'medium', 'large']
         self.useCats = 1
 
-    def setKpParams(self):
+    def setKpParams(self,sigmaType='MARS_top'):
         self.imgIds = []
         self.catIds = []
         # np.arange causes trouble.  the data point on arange is slightly larger than the true value
@@ -520,13 +524,21 @@ class Params:
         self.areaRng = [[0 ** 2, 1e5 ** 2], [32 ** 2, 96 ** 2], [96 ** 2, 1e5 ** 2]]
         self.areaRngLbl = ['all', 'medium', 'large']
         self.useCats = 1
-        self.kpt_oks_sigmas = np.array([.26, .25, .25, .35, .35, .79, .79, .72, .72, .62,.62, 1.07, 1.07, .87, .87, .89, .89])/10.0
 
-    def __init__(self, iouType='segm'):
+        sigma_values = {
+            'human':      np.array([.26, .25, .25, .35, .35, .79, .79, .72, .72, .62,.62, 1.07, 1.07, .87, .87, .89, .89])/10.0,
+            'MARS_top':   np.array([0.039, 0.045, 0.045, 0.042, 0.067, 0.067 , 0.044, 0.067, 0.084]),
+            'MARS_front': np.array([0.087, 0.087, 0.087, 0.093, 0.125, 0.125, 0.086, 0.108, 0.145, 0.125, 0.125, 0.125, 0.125]),
+            'narrow':     np.array([0.025])
+        }
+
+        self.kpt_oks_sigmas = sigma_values[sigmaType]
+
+    def __init__(self, iouType='segm', sigmaType='MARS_top'):
         if iouType == 'segm' or iouType == 'bbox':
             self.setDetParams()
         elif iouType == 'keypoints':
-            self.setKpParams()
+            self.setKpParams(sigmaType)
         else:
             raise Exception('iouType not supported')
         self.iouType = iouType

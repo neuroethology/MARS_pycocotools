@@ -5,9 +5,9 @@ external/
 .DS_Store
 .idea
 
-pycocotools/__init__.pyc
-pycocotools/_mask.c
-pycocotools/_mask.so
-pycocotools/coco.pyc
-pycocotools/cocoeval.pyc
-pycocotools/mask.pyc
+__init__.pyc
+_mask.c
+_mask.so
+coco.pyc
+cocoeval.pyc
+mask.pyc
