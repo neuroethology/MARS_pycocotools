@@ -2,15 +2,15 @@ images/
 annotations/
 results/
 external/
+build/
+__pycache__/
 .DS_Store
+.idea
 
-MatlabAPI/analyze*/
-MatlabAPI/visualize*/
-MatlabAPI/private/maskApiMex.*
-
-PythonAPI/pycocotools/__init__.pyc
-PythonAPI/pycocotools/_mask.c
-PythonAPI/pycocotools/_mask.so
-PythonAPI/pycocotools/coco.pyc
-PythonAPI/pycocotools/cocoeval.pyc
-PythonAPI/pycocotools/mask.pyc
+__init__.pyc
+_mask.c
+_mask.so
+coco.pyc
+cocoeval.pyc
+mask.pyc
+_mask.cp37-win_amd64.pyd

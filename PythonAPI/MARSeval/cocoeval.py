@@ -56,8 +56,9 @@ class COCOeval:
     # Microsoft COCO Toolbox.      version 2.0
     # Data, paper, and tutorials available at:  http://mscoco.org/
     # Code written by Piotr Dollar and Tsung-Yi Lin, 2015.
+    # Code modified for application to MARS by Ann Kennedy, 2021.
     # Licensed under the Simplified BSD License [see coco/license.txt]
-    def __init__(self, cocoGt=None, cocoDt=None, iouType='segm'):
+    def __init__(self, cocoGt=None, cocoDt=None, iouType='keypoints', sigmaType='fixed', useParts=[]):
         '''
         Initialize CocoEval using coco APIs for gt and dt
         :param cocoGt: coco object with ground truth annotations
@@ -65,14 +66,19 @@ class COCOeval:
         :return: None
         '''
         if not iouType:
-            print('iouType not specified. use default iouType segm')
+            print('iouType not specified. use default iouType keypoints')
+        if not sigmaType:
+            print('sigmaType not specified. use default sigmaType fixed, with width narrow (0.025)')
+        elif not sigmaType=='fixed' and not useParts:
+            print('no body parts specified for sigmas: using all parts available for ' + sigmaType)
+
         self.cocoGt   = cocoGt              # ground truth COCO API
         self.cocoDt   = cocoDt              # detections COCO API
         self.evalImgs = defaultdict(list)   # per-image per-category evaluation results [KxAxI] elements
         self.eval     = {}                  # accumulated evaluation results
         self._gts = defaultdict(list)       # gt for evaluation
         self._dts = defaultdict(list)       # dt for evaluation
-        self.params = Params(iouType=iouType) # parameters
+        self.params = Params(iouType=iouType, sigmaType=sigmaType, useParts=useParts) # parameters
         self._paramsEval = {}               # parameters for evaluation
         self.stats = []                     # result summarization
         self.ious = {}                      # ious between all gts and dts
@@ -204,12 +210,12 @@ class COCOeval:
         ious = np.zeros((len(dts), len(gts)))
         sigmas = p.kpt_oks_sigmas
         vars = (sigmas * 2)**2
-        k = len(sigmas)
         # compute oks between each detection and ground truth object
         for j, gt in enumerate(gts):
             # create bounds for ignore regions(double the gt bbox)
             g = np.array(gt['keypoints'])
             xg = g[0::3]; yg = g[1::3]; vg = g[2::3]
+            k = len(xg)
             k1 = np.count_nonzero(vg > 0)
             bb = gt['bbox']
             x0 = bb[0] - bb[2]; x1 = bb[0] + bb[2] * 2
@@ -224,8 +230,8 @@ class COCOeval:
                 else:
                     # measure minimum distance to keypoints in (x0,y0) & (x1,y1)
                     z = np.zeros((k))
-                    dx = np.max((z, x0-xd),axis=0)+np.max((z, xd-x1),axis=0)
-                    dy = np.max((z, y0-yd),axis=0)+np.max((z, yd-y1),axis=0)
+                    dx = np.max((z, x0-xd), axis=0) + np.max((z, xd-x1), axis=0)
+                    dy = np.max((z, y0-yd), axis=0) + np.max((z, yd-y1), axis=0)
                 e = (dx**2 + dy**2) / vars / (gt['area']+np.spacing(1)) / 2
                 if k1 > 0:
                     e=e[vg > 0]
@@ -422,7 +428,7 @@ class COCOeval:
     def summarize(self):
         '''
         Compute and display summary metrics for evaluation results.
-        Note this functin can *only* be applied on the default parameter setting
+        Note this function can *only* be applied on the default parameter setting
         '''
         def _summarize( ap=1, iouThr=None, areaRng='all', maxDets=100 ):
             p = self.params
@@ -510,7 +516,7 @@ class Params:
         self.areaRngLbl = ['all', 'small', 'medium', 'large']
         self.useCats = 1
 
-    def setKpParams(self):
+    def setKpParams(self,sigmaType='MARS_top',useParts=[]):
         self.imgIds = []
         self.catIds = []
         # np.arange causes trouble.  the data point on arange is slightly larger than the true value
@@ -520,13 +526,43 @@ class Params:
         self.areaRng = [[0 ** 2, 1e5 ** 2], [32 ** 2, 96 ** 2], [96 ** 2, 1e5 ** 2]]
         self.areaRngLbl = ['all', 'medium', 'large']
         self.useCats = 1
-        self.kpt_oks_sigmas = np.array([.26, .25, .25, .35, .35, .79, .79, .72, .72, .62,.62, 1.07, 1.07, .87, .87, .89, .89])/10.0
 
-    def __init__(self, iouType='segm'):
+        # so many sigmas! the human ones come from CoCo
+        self.sigma_values = {
+            'human':      {'nose':0.026, 'eyeL':0.025, 'eyeR':0.025, 'earL':0.035, 'earR':0.035,
+                           'right shoulder':0.079, 'left shoulder':0.079, 'right elbow':0.072, 'left elbow':0.072,
+                           'right wrist':0.062, 'left wrist':0.062, 'right hip':0.107, 'left hip':0.107,
+                           'right knee':0.087, 'left knee':0.087, 'right ankle':0.089, 'left ankle':0.089},
+            'MARS_top':   {'nose tip':0.039, 'right ear':0.045, 'left ear':0.045, 'neck':0.042,
+                           'right side body':0.067, 'left side body':0.067,
+                           'tail base':0.044, 'middle tail':0.067, 'end tail':0.084},
+            'MARS_front': {'nose tip':0.087, 'right ear':0.087, 'left ear':0.087, 'neck':0.093,
+                           'right side body':0.125, 'left side body':0.125,
+                           'tail base':0.086, 'middle tail':0.108, 'end tail':0.145,
+                           'right front paw':0.125, 'left front paw':0.125, 'right rear paw':0.125, 'left rear paw':0.125},
+            'fixed':     {'narrow':0.025, 'moderate':0.05, 'wide': 0.1, 'ultrawide': 0.15}
+        }
+
+        sigList = []
+        if useParts: # names of body parts to keep, in the order they should be evaluated!
+            for part in useParts:
+                if not part in self.sigma_values[sigmaType].keys():
+                    raise ValueError('Part not recognized. The valid part names for ' + sigmaType +
+                                     ' keypoints are: ' + " | ".join(x for x in self.sigma_values[sigmaType].keys()))
+                sigList.append(self.sigma_values[sigmaType][part])
+        else:
+            if sigmaType == 'fixed':
+                sigList.append(self.sigma_values['fixed']['narrow']) # default behavior for fixed-value sigmas
+            else:
+                for part in self.sigma_values[sigmaType]:
+                    sigList.append(self.sigma_values[sigmaType][part])
+        self.kpt_oks_sigmas = np.array(sigList)
+
+    def __init__(self, iouType='keypoints', sigmaType='fixed', useParts=[]):
         if iouType == 'segm' or iouType == 'bbox':
             self.setDetParams()
         elif iouType == 'keypoints':
-            self.setKpParams()
+            self.setKpParams(sigmaType, useParts)
         else:
             raise Exception('iouType not supported')
         self.iouType = iouType
