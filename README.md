@@ -1,11 +1,12 @@
-This fork of the COCO API was made to allow evaluation of mouse pose estimates that use the MARS keypoint definitions:
+This fork of pycocotools from the COCO API was made to allow evaluation of mouse pose estimates that use the MARS keypoint definitions:
 <p align=center>
 <img src=MARS_kpt_reference.png height=150>
 </p>
-The code is largely unchanged, however the sigmas used for Object Keypoint Similarity have been modified to reflect the values estimated from the MARS dataset; this change was made in PythonAPI/pycocotools/cocoeval.py. The Matlab and Lua APIs have not yet been updated to reflect these changes.
+The code is largely unchanged, however the sigmas used for Object Keypoint Similarity have been modified to reflect the values estimated from the MARS dataset; this change was made in pycocotools/cocoeval.py. The Matlab and Lua versions of the original CoCo API have been removed for simplicity.
 
 
 ---
+<small>
 Original documentation follows:
 
 COCO API - http://cocodataset.org/
@@ -23,3 +24,4 @@ To install:
 -For Matlab, add coco/MatlabApi to the Matlab path (OSX/Linux binaries provided)
 -For Python, run "make" under coco/PythonAPI
 -For Lua, run “luarocks make LuaAPI/rocks/coco-scm-1.rockspec” under coco/
+</small>
