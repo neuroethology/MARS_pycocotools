@@ -6,15 +6,15 @@ import numpy as np
 
 ext_modules = [
     Extension(
-        'pycocotools._mask',
+        'MARS_pycocotools._mask',
         sources=['common/maskApi.c', '_mask.pyx'],
         include_dirs = [np.get_include(), 'common'],
-        extra_compile_args=[] #['-Wno-cpp', '-Wno-unused-function', '-std=c99'],
+        extra_compile_args=[] # previously: ['-Wno-cpp', '-Wno-unused-function', '-std=c99'],
     )
 ]
 
 setup(
-    name='pycocotools',
+    name='MARS_pycocotools',
     packages=['pycocotools'],
     package_dir = {'pycocotools': '.'},
     install_requires=[
