@@ -5,7 +5,9 @@ This fork of pycocotools from the COCO API was made to allow evaluation of mouse
 The code is largely unchanged, however the sigmas used for Object Keypoint Similarity have been modified to reflect the values estimated from the MARS dataset; this change was made in pycocotools/cocoeval.py. The Matlab and Lua versions of the original CoCo API have been removed for simplicity.
 
 ### Installation
-Installation on Windows requires Microsoft Visual C++ Build Tools from [here](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+Requirements:
+* Microsoft Visual C++ Build Tools- download from [here](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
+* Cython - call `pip install cython`.
 
 To install locally, call:
 `python setup.py build_ext --inplace`
