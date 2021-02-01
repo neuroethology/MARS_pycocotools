@@ -2,6 +2,8 @@ images/
 annotations/
 results/
 external/
+build/
+__pycache__/
 .DS_Store
 .idea
 
@@ -11,3 +13,4 @@ _mask.so
 coco.pyc
 cocoeval.pyc
 mask.pyc
+_mask.cp37-win_amd64.pyd
