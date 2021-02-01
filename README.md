@@ -8,12 +8,13 @@ The code is largely unchanged, however the sigmas used for Object Keypoint Simil
 Note: in the future, this will come pre-installed in the `mars_dev` conda environment of [https://github.com/neuroethology/MARS_Developer](https://github.com/neuroethology/MARS_Developer).
 
 #### Linux
-In progress~
+In progress.
 
 #### Windows
 If you don't have them, install:
 * Microsoft Visual C++ Build Tools- download from [here](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
 * Cython - call `pip install cython`.
+
 then, call:
 ```
 pip install git+https://github.com/neuroethology/MARS_pycocotools.git#egg=pycocotools^&subdirectory=PythonAPI
