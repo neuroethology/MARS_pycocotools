@@ -543,15 +543,19 @@ class Params:
             'fixed':     {'narrow':0.025, 'moderate':0.05, 'wide': 0.1, 'ultrawide': 0.15}
         }
 
+        self.kpt_oks_sigmas = []
         if useParts: # names of body parts to keep, in the order they should be evaluated!
-            for i, part in enumerate(useParts):
+            for part in useParts:
+                if not part in self.sigma_values[sigmaType].keys():
+                    raise ValueError('Part not recognized. The valid part names for ' + sigmaType +
+                                     ' keypoints are ' + " | ".join(x for x in self.sigma_values[sigmaType].keys()))
                 assert part in self.sigma_values[sigmaType].keys() # don't give me keys I don't know how to use
-                self.kpt_oks_sigmas[i] = self.sigma_values[sigmaType][part]
-        else: # make this empty
+                self.kpt_oks_sigmas.append(self.sigma_values[sigmaType][part])
+        else:
             if sigmaType == 'fixed':
-                self.kpts_oks_sigmas = self.sigma_values['fixed']['narrow'] # default behavior for fixed-value sigmas
+                self.kpts_oks_sigmas.append(self.sigma_values['fixed']['narrow']) # default behavior for fixed-value sigmas
             else:
-                for i,part in enumerate(self.sigma_values[sigmaType]):
+                for part in self.sigma_values[sigmaType]:
                     self.kpt_oks_sigmas[i] = self.sigma_values[sigmaType][part]
 
     def __init__(self, iouType='keypoints', sigmaType='fixed', useParts=[]):
