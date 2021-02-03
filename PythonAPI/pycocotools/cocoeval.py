@@ -514,7 +514,7 @@ class Params:
         self.areaRngLbl = ['all', 'small', 'medium', 'large']
         self.useCats = 1
 
-    def setKpParams(self,sigmaType='MARS_top'):
+    def setKpParams(self,sigmaType='MARS_top',useParts=[]):
         self.imgIds = []
         self.catIds = []
         # np.arange causes trouble.  the data point on arange is slightly larger than the true value
@@ -525,20 +525,38 @@ class Params:
         self.areaRngLbl = ['all', 'medium', 'large']
         self.useCats = 1
 
+        # so many sigmas! the human ones come from CoCo
         sigma_values = {
-            'human':      np.array([.26, .25, .25, .35, .35, .79, .79, .72, .72, .62,.62, 1.07, 1.07, .87, .87, .89, .89])/10.0,
-            'MARS_top':   np.array([0.039, 0.045, 0.045, 0.042, 0.067, 0.067 , 0.044, 0.067, 0.084]),
-            'MARS_front': np.array([0.087, 0.087, 0.087, 0.093, 0.125, 0.125, 0.086, 0.108, 0.145, 0.125, 0.125, 0.125, 0.125]),
-            'narrow':     np.array([0.025])
+            'human':      {'nose':0.026, 'eyeL':0.025, 'eyeR':0.025, 'earL':0.035, 'earR':0.035,
+                           'right shoulder':0.079, 'left shoulder':0.079, 'right elbow':0.072, 'left elbow':0.072,
+                           'right wrist':0.062, 'left wrist':0.062, 'right hip':0.107, 'left hip':0.107,
+                           'right knee':0.087, 'left knee':0.087, 'right ankle':0.089, 'left ankle':0.089},
+            'MARS_top':   {'nose tip':0.039, 'right ear':0.045, 'left ear':0.045, 'neck':0.042,
+                           'right side body':0.067, 'left side body':0.067,
+                           'tail base':0.044, 'middle tail':0.067, 'end tail':0.084},
+            'MARS_front': {'nose tip':0.087, 'right ear':0.087, 'left ear':0.087, 'neck':0.093,
+                           'right side body':0.125, 'left side body':0.125,
+                           'tail base':0.086, 'middle tail':0.108, 'end tail':0.145,
+                           'right front paw':0.125, 'left front paw':0.125, 'right rear paw':0.125, 'left rear paw':0.125},
+            'fixed':     {'narrow':0.025, 'moderate':0.05, 'wide': 0.1, 'ultrawide': 0.15}
         }
 
-        self.kpt_oks_sigmas = sigma_values[sigmaType]
+        if useParts: # names of body parts to keep, in the order they should be evaluated!
+            for i, part in enumerate(useParts):
+                assert part in sigma_values[sigmaType].keys() # don't give me keys I don't know how to use
+                self.kpt_oks_sigmas[i] = sigma_values[sigmaType][part]
+        else: # make this empty
+            if sigmaType == 'fixed':
+                self.kpts_oks_sigmas = sigma_values['fixed']['narrow'] # default behavior for fixed-value sigmas
+            else:
+                for i,part in enumerate(sigma_values[sigmaType]):
+                    self.kpt_oks_sigmas[i] = sigma_values[sigmaType][part]
 
-    def __init__(self, iouType='segm', sigmaType='MARS_top'):
+    def __init__(self, iouType='segm', sigmaType='narrow', useParts=[]):
         if iouType == 'segm' or iouType == 'bbox':
             self.setDetParams()
         elif iouType == 'keypoints':
-            self.setKpParams(sigmaType)
+            self.setKpParams(sigmaType, useParts)
         else:
             raise Exception('iouType not supported')
         self.iouType = iouType
