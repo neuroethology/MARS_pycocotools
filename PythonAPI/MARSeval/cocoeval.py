@@ -69,7 +69,7 @@ class COCOeval:
             print('iouType not specified. use default iouType keypoints')
         if not sigmaType:
             print('sigmaType not specified. use default sigmaType fixed, with width narrow (0.025)')
-        elif not sigmaType=='fixed' and not useParts:
+        elif not sigmaType=='fixed' and not useParts.any():
             print('no body parts specified for sigmas: using all parts available for ' + sigmaType)
 
         self.cocoGt   = cocoGt              # ground truth COCO API
