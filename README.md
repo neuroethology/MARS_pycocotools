@@ -37,9 +37,9 @@ In the original `pycocotools`, the scaling factor Sigma is estimated from the va
 `MARSeval` supplements these Sigmas with scaling factors estimated from the variance of human annotations of mouse body parts in the MARS pose dataset. The Sigma values used may be specified when a `COCOeval` object is instantiated:
 
 ```
-cocoEval = COCOeval(gt_data, pred_data, iouType='keypoints', sigmaType='MARS_top', useParts=parts)
+cocoEval = COCOeval(gt_data, pred_data, iouType='keypoints', sigmaType='MARS_top', useParts=['nose tip, right ear, left ear, tail base'])
 ```
-where `gt_data` and `pred_data` are your ground-truth and predicted keypoint locations in the COCO format, and `parts` is a list of the body parts you would like to evaluate, in the order they appear in `pred_data`. The following values of `sigmaType` and `useParts` are available:
+where `gt_data` and `pred_data` are your ground-truth and predicted keypoint locations in the COCO format. Here, `useParts` is a list of the body parts you would like to evaluate, in the order they appear in `pred_data`, and sigmaType specifies whether these should be taken from human pose, MARS top-view annotations, or MARS front-view annotations. The following values of `sigmaType` and `useParts` are available:
 
 * **human**: nose, right eye, left eye, right ear, left ear, right shoulder, left shoulder, right elbow, left elbow, right wrist, left wrist, right hip, left hip, right knee, left knee, right ankle, left ankle
 * **MARS_top**: nose tip, right ear, left ear, neck, right side body, left side body, tail base, middle tail, end tail
