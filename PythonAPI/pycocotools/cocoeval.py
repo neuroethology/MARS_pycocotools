@@ -548,8 +548,7 @@ class Params:
             for part in useParts:
                 if not part in self.sigma_values[sigmaType].keys():
                     raise ValueError('Part not recognized. The valid part names for ' + sigmaType +
-                                     ' keypoints are ' + " | ".join(x for x in self.sigma_values[sigmaType].keys()))
-                assert part in self.sigma_values[sigmaType].keys() # don't give me keys I don't know how to use
+                                     ' keypoints are: ' + " | ".join(x for x in self.sigma_values[sigmaType].keys()))
                 self.kpt_oks_sigmas.append(self.sigma_values[sigmaType][part])
         else:
             if sigmaType == 'fixed':
