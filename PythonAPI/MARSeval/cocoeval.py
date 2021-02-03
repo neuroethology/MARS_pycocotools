@@ -544,7 +544,7 @@ class Params:
         }
 
         self.kpt_oks_sigmas = []
-        if useParts: # names of body parts to keep, in the order they should be evaluated!
+        if useParts.any(): # names of body parts to keep, in the order they should be evaluated!
             for part in useParts:
                 if not part in self.sigma_values[sigmaType].keys():
                     raise ValueError('Part not recognized. The valid part names for ' + sigmaType +
