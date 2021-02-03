@@ -528,7 +528,7 @@ class Params:
         self.useCats = 1
 
         # so many sigmas! the human ones come from CoCo
-        sigma_values = {
+        self.sigma_values = {
             'human':      {'nose':0.026, 'eyeL':0.025, 'eyeR':0.025, 'earL':0.035, 'earR':0.035,
                            'right shoulder':0.079, 'left shoulder':0.079, 'right elbow':0.072, 'left elbow':0.072,
                            'right wrist':0.062, 'left wrist':0.062, 'right hip':0.107, 'left hip':0.107,
@@ -545,14 +545,14 @@ class Params:
 
         if useParts: # names of body parts to keep, in the order they should be evaluated!
             for i, part in enumerate(useParts):
-                assert part in sigma_values[sigmaType].keys() # don't give me keys I don't know how to use
-                self.kpt_oks_sigmas[i] = sigma_values[sigmaType][part]
+                assert part in self.sigma_values[sigmaType].keys() # don't give me keys I don't know how to use
+                self.kpt_oks_sigmas[i] = self.sigma_values[sigmaType][part]
         else: # make this empty
             if sigmaType == 'fixed':
-                self.kpts_oks_sigmas = sigma_values['fixed']['narrow'] # default behavior for fixed-value sigmas
+                self.kpts_oks_sigmas = self.sigma_values['fixed']['narrow'] # default behavior for fixed-value sigmas
             else:
-                for i,part in enumerate(sigma_values[sigmaType]):
-                    self.kpt_oks_sigmas[i] = sigma_values[sigmaType][part]
+                for i,part in enumerate(self.sigma_values[sigmaType]):
+                    self.kpt_oks_sigmas[i] = self.sigma_values[sigmaType][part]
 
     def __init__(self, iouType='keypoints', sigmaType='fixed', useParts=[]):
         if iouType == 'segm' or iouType == 'bbox':
