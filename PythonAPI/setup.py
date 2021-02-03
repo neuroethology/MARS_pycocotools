@@ -16,9 +16,9 @@ ext_modules = [
 ]
 
 setup(
-    name='pycocotools',
-    packages=['pycocotools'],
-    package_dir = {'pycocotools': 'pycocotools'},
+    name='MARS_pycocotools',
+    packages=['MARS_pycocotools'],
+    package_dir = {'MARS_pycocotools': 'pycocotools'},
     install_requires=[
         'setuptools>=18.0',
         'cython>=0.27.3',
