@@ -8,17 +8,17 @@ import numpy as np
 
 ext_modules = [
     Extension(
-        'pycocotools._mask',
-        sources=['../common/maskApi.c', 'pycocotools/_mask.pyx'],
+        'mars-eval._mask',
+        sources=['../common/maskApi.c', 'mars-eval/_mask.pyx'],
         include_dirs = [np.get_include(), '../common'],
         extra_compile_args=[] # previously: ['-Wno-cpp', '-Wno-unused-function', '-std=c99'],
     )
 ]
 
 setup(
-    name='MARS_pycocotools',
-    packages=['MARS_pycocotools'],
-    package_dir = {'MARS_pycocotools': 'pycocotools'},
+    name='mars-eval',
+    packages=['mars-eval'],
+    package_dir = {'mars-eval': 'mars-eval'},
     install_requires=[
         'setuptools>=18.0',
         'cython>=0.27.3',
