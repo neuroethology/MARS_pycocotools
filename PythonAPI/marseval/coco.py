@@ -3,11 +3,11 @@ __version__ = '2.0'
 # Interface for accessing the Microsoft COCO dataset.
 
 # Microsoft COCO is a large image dataset designed for object detection,
-# segmentation, and caption generation. mars-eval is a Python API that
+# segmentation, and caption generation. marseval is a Python API that
 # assists in loading, parsing and visualizing the annotations in COCO.
 # Please visit http://mscoco.org/ for more information on COCO, including
 # for the data, paper, and tutorials. The exact format of the annotations
-# is also described on the COCO website. For example usage of the mars-eval
+# is also described on the COCO website. For example usage of the marseval
 # please see pycocotools_demo.ipynb. In addition to this API, please download both
 # the COCO images and annotations in order to run the demo.
 

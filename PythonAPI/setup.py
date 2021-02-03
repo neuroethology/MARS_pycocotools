@@ -8,17 +8,17 @@ import numpy as np
 
 ext_modules = [
     Extension(
-        'mars-eval._mask',
-        sources=['../common/maskApi.c', 'mars-eval/_mask.pyx'],
+        'marseval._mask',
+        sources=['../common/maskApi.c', 'marseval/_mask.pyx'],
         include_dirs = [np.get_include(), '../common'],
         extra_compile_args=[] # previously: ['-Wno-cpp', '-Wno-unused-function', '-std=c99'],
     )
 ]
 
 setup(
-    name='mars-eval',
-    packages=['mars-eval'],
-    package_dir = {'mars-eval': 'mars-eval'},
+    name='marseval',
+    packages=['marseval'],
+    package_dir = {'marseval': 'marseval'},
     install_requires=[
         'setuptools>=18.0',
         'cython>=0.27.3',
