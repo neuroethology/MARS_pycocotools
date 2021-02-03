@@ -58,7 +58,7 @@ class COCOeval:
     # Code written by Piotr Dollar and Tsung-Yi Lin, 2015.
     # Code modified for application to MARS by Ann Kennedy, 2021.
     # Licensed under the Simplified BSD License [see coco/license.txt]
-    def __init__(self, cocoGt=None, cocoDt=None, iouType='segm', sigmaType='MARS'):
+    def __init__(self, cocoGt=None, cocoDt=None, iouType='keypoints', sigmaType='fixed', useParts=[]):
         '''
         Initialize CocoEval using coco APIs for gt and dt
         :param cocoGt: coco object with ground truth annotations
@@ -66,9 +66,11 @@ class COCOeval:
         :return: None
         '''
         if not iouType:
-            print('iouType not specified. use default iouType segm')
+            print('iouType not specified. use default iouType keypoints')
         if not sigmaType:
-            print('sigmaType not specified. use default sigmaType MARS')
+            print('sigmaType not specified. use default sigmaType fixed, with width narrow (0.025)')
+        elif not sigmaType=='fixed' and not useParts:
+            print('no body parts specified for sigmas: using all parts available for ' + sigmaType)
 
         self.cocoGt   = cocoGt              # ground truth COCO API
         self.cocoDt   = cocoDt              # detections COCO API
@@ -76,7 +78,7 @@ class COCOeval:
         self.eval     = {}                  # accumulated evaluation results
         self._gts = defaultdict(list)       # gt for evaluation
         self._dts = defaultdict(list)       # dt for evaluation
-        self.params = Params(iouType=iouType) # parameters
+        self.params = Params(iouType=iouType, sigmaType=sigmaType, useParts=useParts) # parameters
         self._paramsEval = {}               # parameters for evaluation
         self.stats = []                     # result summarization
         self.ious = {}                      # ious between all gts and dts
@@ -552,7 +554,7 @@ class Params:
                 for i,part in enumerate(sigma_values[sigmaType]):
                     self.kpt_oks_sigmas[i] = sigma_values[sigmaType][part]
 
-    def __init__(self, iouType='segm', sigmaType='fixed', useParts=[]):
+    def __init__(self, iouType='keypoints', sigmaType='fixed', useParts=[]):
         if iouType == 'segm' or iouType == 'bbox':
             self.setDetParams()
         elif iouType == 'keypoints':
