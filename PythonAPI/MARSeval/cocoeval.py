@@ -69,7 +69,7 @@ class COCOeval:
             print('iouType not specified. use default iouType keypoints')
         if not sigmaType:
             print('sigmaType not specified. use default sigmaType fixed, with width narrow (0.025)')
-        elif not sigmaType=='fixed' and not useParts.any():
+        elif not sigmaType=='fixed' and not useParts:
             print('no body parts specified for sigmas: using all parts available for ' + sigmaType)
 
         self.cocoGt   = cocoGt              # ground truth COCO API
@@ -544,7 +544,7 @@ class Params:
         }
 
         self.kpt_oks_sigmas = []
-        if useParts.any(): # names of body parts to keep, in the order they should be evaluated!
+        if useParts: # names of body parts to keep, in the order they should be evaluated!
             for part in useParts:
                 if not part in self.sigma_values[sigmaType].keys():
                     raise ValueError('Part not recognized. The valid part names for ' + sigmaType +
