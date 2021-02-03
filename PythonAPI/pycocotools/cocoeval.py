@@ -552,7 +552,7 @@ class Params:
                 for i,part in enumerate(sigma_values[sigmaType]):
                     self.kpt_oks_sigmas[i] = sigma_values[sigmaType][part]
 
-    def __init__(self, iouType='segm', sigmaType='narrow', useParts=[]):
+    def __init__(self, iouType='segm', sigmaType='fixed', useParts=[]):
         if iouType == 'segm' or iouType == 'bbox':
             self.setDetParams()
         elif iouType == 'keypoints':
