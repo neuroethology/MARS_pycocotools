@@ -210,6 +210,7 @@ class COCOeval:
         ious = np.zeros((len(dts), len(gts)))
         sigmas = p.kpt_oks_sigmas
         vars = (sigmas * 2)**2
+        nKeep = len(vars) # assume we keep the first nKeep parts of both gts and dts
         # compute oks between each detection and ground truth object
         for j, gt in enumerate(gts):
             # create bounds for ignore regions(double the gt bbox)
@@ -232,7 +233,7 @@ class COCOeval:
                     z = np.zeros((k))
                     dx = np.max((z, x0-xd), axis=0) + np.max((z, xd-x1), axis=0)
                     dy = np.max((z, y0-yd), axis=0) + np.max((z, yd-y1), axis=0)
-                e = (dx**2 + dy**2) / vars / (gt['area']+np.spacing(1)) / 2
+                e = (dx[:nKeep]**2 + dy[:nKeep]**2) / vars / (gt['area']+np.spacing(1)) / 2
                 if k1 > 0:
                     e=e[vg > 0]
                 ious[i, j] = np.sum(np.exp(-e)) / e.shape[0]
@@ -525,18 +526,18 @@ class Params:
 
         # so many sigmas! the human ones come from CoCo
         self.sigma_values = {
-            'human':      {'nose':0.026, 'eyeL':0.025, 'eyeR':0.025, 'earL':0.035, 'earR':0.035,
-                           'right shoulder':0.079, 'left shoulder':0.079, 'right elbow':0.072, 'left elbow':0.072,
-                           'right wrist':0.062, 'left wrist':0.062, 'right hip':0.107, 'left hip':0.107,
-                           'right knee':0.087, 'left knee':0.087, 'right ankle':0.089, 'left ankle':0.089},
-            'MARS_top':   {'nose tip':0.039, 'right ear':0.045, 'left ear':0.045, 'neck':0.042,
-                           'right side body':0.067, 'left side body':0.067,
-                           'tail base':0.044, 'middle tail':0.067, 'end tail':0.084},
-            'MARS_front': {'nose tip':0.087, 'right ear':0.087, 'left ear':0.087, 'neck':0.093,
-                           'right side body':0.125, 'left side body':0.125,
-                           'tail base':0.086, 'middle tail':0.108, 'end tail':0.145,
-                           'right front paw':0.125, 'left front paw':0.125, 'right rear paw':0.125, 'left rear paw':0.125},
-            'fixed':     {'narrow':0.025, 'moderate':0.05, 'wide': 0.1, 'ultrawide': 0.15}
+            'human':      {'nose': 0.026, 'eyeL': 0.025, 'eyeR': 0.025, 'earL': 0.035, 'earR': 0.035,
+                           'right shoulder': 0.079, 'left shoulder': 0.079, 'right elbow': 0.072, 'left elbow': 0.072,
+                           'right wrist': 0.062, 'left wrist': 0.062, 'right hip': 0.107, 'left hip': 0.107,
+                           'right knee': 0.087, 'left knee': 0.087, 'right ankle': 0.089, 'left ankle': 0.089},
+            'MARS_top':   {'nose tip': 0.039, 'right ear': 0.045, 'left ear': 0.045, 'neck': 0.042,
+                           'right side body': 0.067, 'left side body': 0.067,
+                           'tail base': 0.044, 'middle tail': 0.067, 'end tail': 0.084},
+            'MARS_front': {'nose tip': 0.087, 'right ear': 0.087, 'left ear': 0.087, 'neck': 0.093,
+                           'right side body': 0.125, 'left side body': 0.125,
+                           'tail base': 0.086, 'middle tail': 0.108, 'end tail': 0.145,
+                           'right front paw': 0.125, 'left front paw': 0.125, 'right rear paw': 0.125, 'left rear paw': 0.125},
+            'fixed':     {'narrow': 0.025, 'moderate': 0.05, 'wide': 0.1, 'ultrawide': 0.15}
         }
 
         sigList = []

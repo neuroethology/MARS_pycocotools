@@ -65,7 +65,6 @@ def estimate_top_view_sigmas(pkl_file):
 	return sigma
 
 
-
 def estimate_front_view_sigmas(pkl_file):
 	''' call this on 'AMT_data/top/AMT15_csv.pkl'
 	we estimate keypoint accuracy in terms of the Object Keypoint Similarity (OKS) after Ronchi and Perona 2017.
