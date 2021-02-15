@@ -68,28 +68,32 @@ def _isArrayLike(obj):
 
 
 class COCO:
-    def __init__(self, annotation_file=None):
+    def __init__(self, annotation_file=None, verbose=False):
         """
         Constructor of Microsoft COCO helper class for reading and visualizing annotations.
         :param annotation_file (str): location of annotation file
         :param image_folder (str): location to the folder that hosts images.
         :return:
         """
+        self.verbose = verbose
         # load dataset
         self.dataset,self.anns,self.cats,self.imgs = dict(),dict(),dict(),dict()
         self.imgToAnns, self.catToImgs = defaultdict(list), defaultdict(list)
         if not annotation_file == None:
-            print('loading annotations into memory...')
+            if self.verbose:
+                print('loading annotations into memory...')
             tic = time.time()
             dataset = json.load(open(annotation_file, 'r'))
             assert type(dataset)==dict, 'annotation file format {} not supported'.format(type(dataset))
-            print('Done (t={:0.2f}s)'.format(time.time()- tic))
+            if self.verbose:
+                print('Done (t={:0.2f}s)'.format(time.time()- tic))
             self.dataset = dataset
             self.createIndex()
 
     def createIndex(self):
         # create index
-        print('creating index...')
+        if self.verbose:
+            print('creating index...')
         anns, cats, imgs = {}, {}, {}
         imgToAnns,catToImgs = defaultdict(list),defaultdict(list)
         if 'annotations' in self.dataset:
@@ -109,7 +113,8 @@ class COCO:
             for ann in self.dataset['annotations']:
                 catToImgs[ann['category_id']].append(ann['image_id'])
 
-        print('index created!')
+        if self.verbose:
+            print('index created!')
 
         # create class members
         self.anns = anns
@@ -311,7 +316,8 @@ class COCO:
         res = COCO()
         res.dataset['images'] = [img for img in self.dataset['images']]
 
-        print('Loading and preparing results...')
+        if self.verbose:
+            print('Loading and preparing results...')
         tic = time.time()
         if type(resFile) == str or (PYTHON_VERSION == 2 and type(resFile) == unicode):
             anns = json.load(open(resFile))
@@ -357,7 +363,8 @@ class COCO:
                 ann['area'] = (x1-x0)*(y1-y0)
                 ann['id'] = id + 1
                 ann['bbox'] = [x0,y0,x1-x0,y1-y0]
-        print('DONE (t={:0.2f}s)'.format(time.time()- tic))
+        if self.verbose:
+            print('DONE (t={:0.2f}s)'.format(time.time()- tic))
 
         res.dataset['annotations'] = anns
         res.createIndex()
@@ -393,9 +400,11 @@ class COCO:
         :param  data (numpy.ndarray)
         :return: annotations (python nested list)
         """
-        print('Converting ndarray to lists...')
+        if self.verbose:
+            print('Converting ndarray to lists...')
         assert(type(data) == np.ndarray)
-        print(data.shape)
+        if self.verbose:
+            print(data.shape)
         assert(data.shape[1] == 7)
         N = data.shape[0]
         ann = []

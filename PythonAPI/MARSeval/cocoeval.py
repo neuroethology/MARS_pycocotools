@@ -82,6 +82,7 @@ class COCOeval:
         self._paramsEval = {}               # parameters for evaluation
         self.stats = []                     # result summarization
         self.ious = {}                      # ious between all gts and dts
+        self.verbose = False                # print flag
         if not cocoGt is None:
             self.params.imgIds = sorted(cocoGt.getImgIds())
             self.params.catIds = sorted(cocoGt.getCatIds())
@@ -130,13 +131,15 @@ class COCOeval:
         :return: None
         '''
         tic = time.time()
-        print('Running per image evaluation...')
+        if self.verbose:
+            print('Running per image evaluation...')
         p = self.params
         # add backward compatibility if useSegm is specified in params
         if not p.useSegm is None:
             p.iouType = 'segm' if p.useSegm == 1 else 'bbox'
             print('useSegm (deprecated) is not None. Running {} evaluation'.format(p.iouType))
-        print('Evaluate annotation type *{}*'.format(p.iouType))
+        if self.verbose:
+            print('Evaluate annotation type *{}*'.format(p.iouType))
         p.imgIds = list(np.unique(p.imgIds))
         if p.useCats:
             p.catIds = list(np.unique(p.catIds))
@@ -164,7 +167,8 @@ class COCOeval:
              ]
         self._paramsEval = copy.deepcopy(self.params)
         toc = time.time()
-        print('DONE (t={:0.2f}s).'.format(toc-tic))
+        if self.verbose:
+            print('DONE (t={:0.2f}s).'.format(toc-tic))
 
     def computeIoU(self, imgId, catId):
         p = self.params
@@ -325,7 +329,8 @@ class COCOeval:
         :param p: input params for evaluation
         :return: None
         '''
-        print('Accumulating evaluation results...')
+        if self.verbose:
+            print('Accumulating evaluation results...')
         tic = time.time()
         if not self.evalImgs:
             print('Please run evaluate() first')
@@ -424,7 +429,8 @@ class COCOeval:
             'scores': scores,
         }
         toc = time.time()
-        print('DONE (t={:0.2f}s).'.format( toc-tic))
+        if self.verbose:
+            print('DONE (t={:0.2f}s).'.format( toc-tic))
 
     def summarize(self):
         '''
@@ -478,13 +484,13 @@ class COCOeval:
             stats[11] = _summarize(0, areaRng='large', maxDets=self.params.maxDets[2])
             return stats
         def _summarizeKps():
-            stats = np.zeros((6,))
+            stats = np.zeros((2,))
             stats[0] = _summarize(1, maxDets=20)
-            stats[1] = _summarize(1, maxDets=20, iouThr=.5)
-            stats[2] = _summarize(1, maxDets=20, iouThr=.75)
-            stats[3] = _summarize(0, maxDets=20)
-            stats[4] = _summarize(0, maxDets=20, iouThr=.5)
-            stats[5] = _summarize(0, maxDets=20, iouThr=.75)
+            # stats[1] = _summarize(1, maxDets=20, iouThr=.5)
+            # stats[2] = _summarize(1, maxDets=20, iouThr=.75)
+            stats[1] = _summarize(0, maxDets=20)
+            # stats[4] = _summarize(0, maxDets=20, iouThr=.5)
+            # stats[5] = _summarize(0, maxDets=20, iouThr=.75)
             return stats
         if not self.eval:
             raise Exception('Please run accumulate() first')
