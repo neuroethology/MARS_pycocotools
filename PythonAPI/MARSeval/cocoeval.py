@@ -208,13 +208,14 @@ class COCOeval:
         dts = [dts[i] for i in inds]
         if len(dts) > p.maxDets[-1]:
             dts = dts[0:p.maxDets[-1]]
-        # if len(gts) == 0 and len(dts) == 0:
         if len(gts) == 0 or len(dts) == 0:
             return []
         ious = np.zeros((len(dts), len(gts)))
         sigmas = p.kpt_oks_sigmas
         vars = (sigmas * 2)**2
-        nKeep = len(vars) # assume we keep the first nKeep parts of both gts and dts
+        nKeep = int(len(dts[0]['keypoints'])/3)
+        if nKeep != 1 and len(vars) == 1:
+            vars = np.repeat(vars,nKeep)
         # compute oks between each detection and ground truth object
         for j, gt in enumerate(gts):
             # create bounds for ignore regions(double the gt bbox)
