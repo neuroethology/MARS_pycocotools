@@ -82,6 +82,7 @@ class COCOeval:
         self._paramsEval = {}               # parameters for evaluation
         self.stats = []                     # result summarization
         self.ious = {}                      # ious between all gts and dts
+        self.pcks = {}                      # distance in pixels between all gts and dts
         self.verbose = False                # print flag
         if not cocoGt is None:
             self.params.imgIds = sorted(cocoGt.getImgIds())
@@ -154,6 +155,10 @@ class COCOeval:
             computeIoU = self.computeIoU
         elif p.iouType == 'keypoints':
             computeIoU = self.computeOks
+            self.pcks = {(imgId, catId): self.computePcks(imgId, catId) \
+                         for imgId in p.imgIds
+                         for catId in catIds}   # added to compute percent correct keypoints as alternative metric
+
         self.ious = {(imgId, catId): computeIoU(imgId, catId) \
                         for imgId in p.imgIds
                         for catId in catIds}
@@ -243,6 +248,52 @@ class COCOeval:
                     e=e[vg > 0]
                 ious[i, j] = np.sum(np.exp(-e)) / e.shape[0]
         return ious
+
+    def computePcks(self, imgId, catId):
+        p = self.params
+        # dimention here should be Nxm
+        gts = self._gts[imgId, catId]
+        dts = self._dts[imgId, catId]
+        inds = np.argsort([-d['score'] for d in dts], kind='mergesort')
+        dts = [dts[i] for i in inds]
+        if len(dts) > p.maxDets[-1]:
+            dts = dts[0:p.maxDets[-1]]
+        if len(gts) == 0 or len(dts) == 0:
+            return []
+        pcks = np.zeros((len(dts), len(gts)))
+        sigmas = p.kpt_oks_sigmas
+        vars = (sigmas * 2)**2
+        nKeep = int(len(dts[0]['keypoints'])/3)
+        if nKeep != 1 and len(vars) == 1:
+            vars = np.repeat(vars,nKeep)
+        # compute oks between each detection and ground truth object
+        for j, gt in enumerate(gts):
+            # create bounds for ignore regions(double the gt bbox)
+            g = np.array(gt['keypoints'])
+            xg = g[0::3]; yg = g[1::3]; vg = g[2::3]
+            k = len(xg)
+            k1 = np.count_nonzero(vg > 0)
+            bb = gt['bbox']
+            x0 = bb[0] - bb[2]; x1 = bb[0] + bb[2] * 2
+            y0 = bb[1] - bb[3]; y1 = bb[1] + bb[3] * 2
+            for i, dt in enumerate(dts):
+                d = np.array(dt['keypoints'])
+                xd = d[0::3]; yd = d[1::3]
+                if k1>0:
+                    # measure the per-keypoint distance if keypoints visible
+                    dx = xd - xg
+                    dy = yd - yg
+                else:
+                    # measure minimum distance to keypoints in (x0,y0) & (x1,y1)
+                    z = np.zeros((k))
+                    dx = np.max((z, x0-xd), axis=0) + np.max((z, xd-x1), axis=0)
+                    dy = np.max((z, y0-yd), axis=0) + np.max((z, yd-y1), axis=0)
+                e = (dx[:nKeep]**2 + dy[:nKeep]**2)
+                if k1 > 0:
+                    e=e[vg > 0]
+                pcks[i, j] = np.sum(e) / e.shape[0]
+        return pcks
+
 
     def evaluateImg(self, imgId, catId, aRng, maxDet):
         '''
