@@ -288,7 +288,7 @@ class COCOeval:
                     z = np.zeros((k))
                     dx = np.max((z, x0-xd), axis=0) + np.max((z, xd-x1), axis=0)
                     dy = np.max((z, y0-yd), axis=0) + np.max((z, yd-y1), axis=0)
-                e = (dx[:nKeep]**2 + dy[:nKeep]**2)
+                e = np.sqrt(dx[:nKeep]**2 + dy[:nKeep]**2)
                 if k1 > 0:
                     e=e[vg > 0]
                 pcks[i, j] = np.sum(e) / e.shape[0]
