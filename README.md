@@ -18,9 +18,13 @@ If you don't have them, install:
 * Microsoft Visual C++ Build Tools- download from [here](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
 * Cython - call `pip install cython`.
 
-then, call:
+on Windows, call:
 ```
 pip install git+https://github.com/neuroethology/MARS_pycocotools.git#egg=MARSeval^&subdirectory=PythonAPI
+```
+or on Linux:
+```
+pip install git+https://github.com/neuroethology/MARS_pycocotools.git#egg=MARSeval&subdirectory=PythonAPI
 ```
 
 ### Additions to the Keypoint API
